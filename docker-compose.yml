@@ -1,0 +1,45 @@
+version: "2"
+
+services:
+  nginx-proxy:
+    image: jwilder/nginx-proxy
+    ports:
+      - "80:80"
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock:ro
+
+  sso-hub:
+    image: nginx
+    volumes:
+      - ./dist/sso-hub:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=sso-hub.myapp.com
+      - VIRTUAL_PORT=80
+  sso-ui:
+    image: nginx
+    volumes:
+      - ./dist/sso-ui:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=sso.myapp.com
+      - VIRTUAL_PORT=80
+  client-a:
+    image: nginx
+    volumes:
+      - ./dist/client-a:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=client-a.myapp.com
+      - VIRTUAL_PORT=80
+  client-b:
+    image: nginx
+    volumes:
+      - ./dist/client-b:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=client-b.myapp.com
+      - VIRTUAL_PORT=80
+  external:
+    image: nginx
+    volumes:
+      - ./dist/external:/usr/share/nginx/html
+    environment:
+      - VIRTUAL_HOST=externalapp.com
+      - VIRTUAL_PORT=80
